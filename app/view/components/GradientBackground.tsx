@@ -1,33 +1,26 @@
 import React, { useRef, useState, useEffect } from "react"
 import { LinearGradient } from 'expo-linear-gradient';
-import { Animated, View, Image, ImageSourcePropType, StyleSheet } from "react-native";
+import { Animated, View, StyleSheet } from "react-native";
 import RainySvg from '../../assets/svg/RainySvg'
 import SunnySvg from '../../assets/svg/SunnySvg'
 import StormySvg from '../../assets/svg/StormySvg'
 import MistySvg from '../../assets/svg/MistySvg'
+import { WeatherType } from '../../redux/reducers'
 
 export type BackgroundInfo = {
-    type: string
+    type: WeatherType
     startColor: string
     endColor: string
 }
 
-const RainyType = "Rainy"
-const SunnyType = "Sunny"
-const StormyType = "Stormy"
-const MistyType = "Misty"
-
-export const Rainy = { type: RainyType, startColor: '#053D75', endColor: '#0098B1' }
-export const Sunny = { type: SunnyType, startColor: '#E36550', endColor: '#ECBB69' }
-export const Stormy = { type: StormyType, startColor: '#065963', endColor: '#E2EEA4' }
-export const Misty = { type: MistyType, startColor: '#B9C6D6', endColor: '#79838D' }
+export const Rainy: BackgroundInfo = { type: WeatherType.Rainy, startColor: '#053D75', endColor: '#0098B1' }
+export const Sunny: BackgroundInfo = { type: WeatherType.Sunny, startColor: '#E36550', endColor: '#ECBB69' }
+export const Stormy: BackgroundInfo = { type: WeatherType.Stormy, startColor: '#065963', endColor: '#E2EEA4' }
+export const Misty: BackgroundInfo = { type: WeatherType.Misty, startColor: '#B9C6D6', endColor: '#79838D' }
 
 class GradientHelper extends React.Component<BackgroundInfo> {
     render() {
-        const {
-            startColor,
-            endColor
-        } = this.props;
+        const { startColor, endColor } = this.props;
         return (
             <LinearGradient
                 colors={[startColor, endColor]}
@@ -42,7 +35,8 @@ class GradientHelper extends React.Component<BackgroundInfo> {
 
 const AnimatedGradientHelper = Animated.createAnimatedComponent(GradientHelper);
 
-const GradientTransient = ({ startColor, endColor, type }: BackgroundInfo) => {
+const GradientTransient = (props: BackgroundInfo) => {
+    const { startColor, endColor, type } = props
     const animation = useRef(new Animated.Value(0)).current
     const [prevColors, setPrevClors] = useState(['#000000', '#000000'])
 
@@ -75,23 +69,21 @@ const GradientTransient = ({ startColor, endColor, type }: BackgroundInfo) => {
                 endColor={color2Interp}
             />
             <View style={styles.layout}>
-                {
-                    GetBackgroundSvg(type)
-                }
+                {getBackgroundSvg(type)}
             </View>
         </View>
     );
 }
 
-function GetBackgroundSvg(type: string) {
+function getBackgroundSvg(type: WeatherType) {
     switch (type) {
-        case SunnyType:
+        case WeatherType.Sunny:
             return <SunnySvg width={846.7} height={847.5} color="#1E212A" opacity={0.1} />
-        case StormyType:
+        case WeatherType.Stormy:
             return <StormySvg width={707.68} height={697.45} color="#1E212A" opacity={0.1} />
-        case MistyType:
+        case WeatherType.Misty:
             return <MistySvg width={780.2} height={585.15} color="#1E212A" opacity={0.1} />
-        default:
+        case WeatherType.Rainy:
             return <RainySvg width={624.53} height={624.5} color="#1E212A" opacity={0.1} />
     }
 }
@@ -100,11 +92,7 @@ export default GradientTransient
 
 const styles = StyleSheet.create({
     layout: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        ...StyleSheet.absoluteFillObject,
         justifyContent: 'center',
         alignItems: 'center',
     }

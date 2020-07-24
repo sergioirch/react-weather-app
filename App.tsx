@@ -5,9 +5,9 @@ import React from "react";
 import useCachedResources from "./app/view/hooks/useCachedResources";
 import configureStore from "./app/redux/store";
 import { Provider as StoreProvider } from "react-redux";
-import { WeatherState } from "./app/redux/reducers";
+import { WeatherType } from "./app/redux/reducers";
 
-const { store } = configureStore({});
+const { store } = configureStore({ weatherType: WeatherType.Rainy });
 
 export default function App() {
   const isLoadingComplete = useCachedResources()
@@ -16,7 +16,7 @@ export default function App() {
     <StoreProvider store={store}>
       <SafeAreaProvider>
         <Navigation />
-        <StatusBar style="light"/>
+        <StatusBar style="light" />
       </SafeAreaProvider>
     </StoreProvider>
   );

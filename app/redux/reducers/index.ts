@@ -2,48 +2,39 @@ import { WeatherAction, CHANGE_HOUR, CHANGE_DAY, GET_CITIES, GET_WEATHER_INFO } 
 
 const cities = ['Bogotá', 'New York', 'Munich', 'Barcelona', 'Paris']
 
-function getRandomWeather(state: WeatherState): WeatherState {
+function getRandomWeatherType() {
   const randomWeather = Math.floor(Math.random() * 3);
-  const randomTemperature = Math.floor(Math.random() * (20)) - 20;
-  let weather: 'rainy' | 'sunny' | 'stormy' | 'misty'
-
   switch (randomWeather) {
     case 1:
-      weather = 'sunny'
-      break
+      return WeatherType.Sunny
     case 2:
-      weather = 'stormy'
-      break
+      return WeatherType.Stormy
     case 3:
-      weather = 'misty'
-      break
+      return WeatherType.Misty
     default:
-      weather = 'rainy'
+      return WeatherType.Rainy
   }
-  return { ...state, temperature: randomTemperature, weather: weather, city: cities[0] }
+}
+
+function getRandomTemperature() {
+  return Math.floor(Math.random() * (20)) - 20
 }
 
 export const weatherReducer = (
-  state: WeatherState | undefined = { weather: 'rainy' },
+  state: WeatherState | undefined = { weatherType: WeatherType.Rainy },
   action: WeatherAction
 ): WeatherState => {
-  console.log(state)
-  state = getRandomWeather(state)
   switch (action.type) {
     case CHANGE_DAY:
       let newDay = state.day || 0
       action.forward ? newDay++ : newDay--
-      return { ...state, day: newDay }
+      return { ...state, day: newDay, temperature: getRandomTemperature(), weatherType: getRandomWeatherType() }
     case CHANGE_HOUR:
       let newHour = state.hour || 0
       action.forward ? newHour++ : newHour--
-      return { ...state, hour: newHour }
-    case GET_CITIES:
-      return { ...state }
-    case GET_WEATHER_INFO:
-      return { ...state }
+      return { ...state, hour: newHour, temperature: getRandomTemperature(), weatherType: getRandomWeatherType() }
     default:
-      return state;
+      return { ...state, temperature: getRandomTemperature(), weatherType: getRandomWeatherType() };
   }
 };
 
@@ -54,5 +45,12 @@ export type WeatherState = {
   hour?: number,
   day?: number,
   temperature?: number,
-  weather: 'rainy' | 'sunny' | 'stormy' | 'misty'
+  weatherType: WeatherType
 };
+
+export enum WeatherType {
+  Rainy,
+  Sunny,
+  Stormy,
+  Misty,
+}
