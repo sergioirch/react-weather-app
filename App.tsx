@@ -6,8 +6,14 @@ import useCachedResources from "./app/view/hooks/useCachedResources";
 import configureStore from "./app/redux/store";
 import { Provider as StoreProvider } from "react-redux";
 import { WeatherType } from "./app/redux/reducers";
+import rootSaga from "./app/redux/sagas";
+import moment from 'moment'
 
-const { store } = configureStore({ weatherType: WeatherType.Rainy });
+
+
+
+const { store, runSaga } = configureStore({ weatherType: WeatherType.Rainy, cities: [], cityIndex: -1 });
+runSaga(rootSaga);
 
 export default function App() {
   const isLoadingComplete = useCachedResources()

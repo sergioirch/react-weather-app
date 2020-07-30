@@ -38,7 +38,7 @@ const AnimatedGradientHelper = Animated.createAnimatedComponent(GradientHelper);
 const GradientTransient = (props: BackgroundInfo) => {
     const { startColor, endColor, type } = props
     const animation = useRef(new Animated.Value(0)).current
-    const [prevColors, setPrevClors] = useState(['#000000', '#000000'])
+    const [prevColors, setPrevColors] = useState(['#000000', '#000000'])
 
     const color1Interp = animation.interpolate({
         inputRange: [0, 1],
@@ -57,7 +57,7 @@ const GradientTransient = (props: BackgroundInfo) => {
             duration: 300,
             useNativeDriver: false
         }).start(() => {
-            setPrevClors([startColor, endColor])
+            setPrevColors([color1Interp.__getValue(), color2Interp.__getValue()])
         })
     }, [startColor, endColor])
 
