@@ -10,19 +10,18 @@ import moment from 'moment'
 export type WeatherFormattedViewInfo = {
     background: GradientBackground.BackgroundInfo,
     icon: JSX.Element,
-    text: string
 }
 
 export function getWeatherFormattedViewInfo(weather: WeatherType): WeatherFormattedViewInfo {
     switch (weather) {
         case WeatherType.Misty:
-            return { background: GradientBackground.Misty, icon: <MistySvg />, text: "MIST" }
+            return { background: GradientBackground.Misty, icon: <MistySvg />}
         case WeatherType.Stormy:
-            return { background: GradientBackground.Stormy, icon: <StormySvg />, text: "STORM" }
+            return { background: GradientBackground.Stormy, icon: <StormySvg />}
         case WeatherType.Sunny:
-            return { background: GradientBackground.Sunny, icon: <SunnySvg />, text: "SUNNY" }
+            return { background: GradientBackground.Sunny, icon: <SunnySvg />}
         case WeatherType.Rainy:
-            return { background: GradientBackground.Rainy, icon: <RainySvg />, text: "RAIN" }
+            return { background: GradientBackground.Rainy, icon: <RainySvg />}
     }
 }
 
@@ -31,5 +30,5 @@ export function getFormattedHour(hour: number) {
 }
 
 export function getFormattedDay(day: number) {
-    return moment().startOf('week').add(day, 'day').format('ddd')
+    return moment().add(day - 1, 'day').format('ddd')
 }
